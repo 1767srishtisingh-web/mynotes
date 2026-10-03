@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>MyNotes | Unit-wise notes from your faculty</title>
+  <meta name="description" content="MyNotes is a marketplace for unit-wise university notes. Students preview, unlock, read and download; faculty publish notes and track reading time and earnings.">
+  <meta name="theme-color" content="#0A0D1A">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%233B82F6'/%3E%3Cstop offset='1' stop-color='%23A855F7'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='url(%23g)'/%3E%3Cpath d='M20 14h17l9 9v27H20z' fill='%23fff'/%3E%3Cpath d='M37 14v9h9' fill='%23c7d2fe'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="backdrop-glow" aria-hidden="true"></div>
+
+  <header class="nav">
+    <a class="brand" href="./" aria-label="MyNotes home">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-name">MyNotes</span>
+    </a>
+
+    <div class="role-switch" id="roleSwitch" role="radiogroup" aria-label="Choose portal">
+      <button type="button" role="radio" aria-checked="true" data-role="student">Student portal</button>
+      <button type="button" role="radio" aria-checked="false" data-role="faculty">Faculty dashboard</button>
+      <span class="role-thumb" aria-hidden="true"></span>
+    </div>
+
+    <button type="button" class="user-chip" id="userChip" aria-label="Edit your details">
+      <span class="avatar" id="userAvatar" aria-hidden="true">AS</span>
+      <span class="user-text">
+        <span class="user-name" id="userName">Aarav Sharma</span>
+        <span class="user-role" id="userRole">Signed in as student</span>
+      </span>
+    </button>
+  </header>
+
+  <main id="main">
+
+    <!-- ================= Student portal ================= -->
+    <section id="studentView" class="view" aria-labelledby="studentHeading">
+      <div class="hero">
+        <h1 id="studentHeading">Unit-wise notes, written by the faculty who teach the course.</h1>
+        <p class="hero-sub">Read two pages free. Unlock a unit for about ₹100, then read it here or download the PDF.</p>
+        <div class="search">
+          <label class="sr-only" for="searchInput">Search by subject, code, title or faculty</label>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="searchInput" type="search" placeholder="Search a subject, code or faculty, e.g. DBMS or KCS301" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="toolbar" aria-label="Filter notes">
+        <div class="chips" id="unitChips" role="group" aria-label="Filter by unit">
+          <button type="button" class="chip" data-unit="all" aria-pressed="true">All units</button>
+          <button type="button" class="chip" data-unit="1" aria-pressed="false">Unit 1</button>
+          <button type="button" class="chip" data-unit="2" aria-pressed="false">Unit 2</button>
+          <button type="button" class="chip" data-unit="3" aria-pressed="false">Unit 3</button>
+          <button type="button" class="chip" data-unit="4" aria-pressed="false">Unit 4</button>
+          <button type="button" class="chip" data-unit="5" aria-pressed="false">Unit 5</button>
+        </div>
+        <div class="selects">
+          <label class="field-inline"><span>Semester</span>
+            <select id="semSelect">
+              <option value="all">All semesters</option>
+              <option value="1">Semester 1</option><option value="2">Semester 2</option>
+              <option value="3">Semester 3</option><option value="4">Semester 4</option>
+              <option value="5">Semester 5</option><option value="6">Semester 6</option>
+              <option value="7">Semester 7</option><option value="8">Semester 8</option>
+            </select>
+          </label>
+          <label class="field-inline"><span>Branch</span>
+            <select id="branchSelect">
+              <option value="all">All branches</option>
+              <option>CSE</option><option>IT</option><option>ECE</option><option>EE</option><option>ME</option><option>CE</option>
+            </select>
+          </label>
+          <label class="field-inline"><span>Sort by</span>
+            <select id="sortSelect">
+              <option value="popular">Most read</option>
+              <option value="rating">Highest rated</option>
+              <option value="price-asc">Price, low to high</option>
+              <option value="price-desc">Price, high to low</option>
+            </select>
+          </label>
+          <button type="button" class="chip chip-library" id="libraryToggle" aria-pressed="false">My unlocked units</button>
+        </div>
+      </div>
+
+      <p class="result-count" id="resultCount" aria-live="polite"></p>
+      <div class="catalog" id="catalog"></div>
+      <div class="empty" id="emptyState" hidden>
+        <h2>No units match these filters</h2>
+        <p>Try a different unit or semester, or clear the search.</p>
+        <button type="button" class="btn btn-ghost" id="clearFilters">Clear filters</button>
+      </div>
+    </section>
+
+    <!-- ================= Faculty dashboard ================= -->
+    <section id="facultyView" class="view" aria-labelledby="facultyHeading" hidden>
+      <div class="dash-head">
+        <div>
+          <h1 id="facultyHeading">Faculty dashboard</h1>
+          <p class="hero-sub" id="facultyLine"></p>
+        </div>
+        <div class="tabs" id="facultyTabs" role="tablist" aria-label="Dashboard sections">
+          <button type="button" role="tab" id="tab-publish" aria-controls="panel-publish" aria-selected="true">Publish notes</button>
+          <button type="button" role="tab" id="tab-engagement" aria-controls="panel-engagement" aria-selected="false" tabindex="-1">Reading analytics</button>
+          <button type="button" role="tab" id="tab-earnings" aria-controls="panel-earnings" aria-selected="false" tabindex="-1">Earnings</button>
+        </div>
+      </div>
+
+      <!-- Publish -->
+      <div class="panel" id="panel-publish" role="tabpanel" aria-labelledby="tab-publish">
+        <div class="publish-grid">
+          <form class="glass form" id="uploadForm" novalidate>
+            <h2>Upload a unit</h2>
+            <p class="form-hint">One PDF per unit. Students see the first two pages free.</p>
+
+            <div class="form-grid">
+              <label class="field"><span>Subject name</span>
+                <input id="upSubject" name="subject" type="text" placeholder="Data Structures" required maxlength="60">
+              </label>
+              <label class="field"><span>Subject code</span>
+                <input id="upCode" name="code" type="text" placeholder="KCS301" required maxlength="12">
+              </label>
+              <label class="field"><span>Semester</span>
+                <select id="upSem" name="sem" required>
+                  <option value="">Choose</option>
+                  <option>1</option><option>2</option><option>3</option><option>4</option>
+                  <option>5</option><option>6</option><option>7</option><option>8</option>
+                </select>
+              </label>
+              <label class="field"><span>Branch</span>
+                <select id="upBranch" name="branch" required>
+                  <option value="">Choose</option>
+                  <option>CSE</option><option>IT</option><option>ECE</option><option>EE</option><option>ME</option><option>CE</option>
+                </select>
+              </label>
+              <label class="field"><span>Unit number</span>
+                <select id="upUnit" name="unit" required>
+                  <option value="">Choose</option>
+                  <option value="1">Unit 1</option><option value="2">Unit 2</option><option value="3">Unit 3</option>
+                  <option value="4">Unit 4</option><option value="5">Unit 5</option>
+                </select>
+              </label>
+              <label class="field"><span>Price in ₹</span>
+                <input id="upPrice" name="price" type="number" inputmode="numeric" min="10" max="5000" step="1" value="100" required>
+              </label>
+              <label class="field span-2"><span>Document title</span>
+                <input id="upTitle" name="title" type="text" placeholder="Trees, BST and AVL rotations" required maxlength="90">
+              </label>
+              <label class="field span-2"><span>Description</span>
+                <textarea id="upDesc" name="desc" rows="3" placeholder="What the unit covers and how it helps for the exam" required maxlength="400"></textarea>
+              </label>
+              <label class="field span-2"><span>Topics covered, one per line <em>(optional)</em></span>
+                <textarea id="upTopics" name="topics" rows="3" placeholder="Binary search trees&#10;AVL rotations&#10;Heaps"></textarea>
+              </label>
+
+              <div class="field span-2">
+                <span id="fileLabel">Notes file (PDF, up to 25 MB)</span>
+                <label class="dropzone" id="dropzone" for="upFile">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0-4 4m4-4 4 4M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+                  <span id="fileText">Choose a PDF or drop it here</span>
+                </label>
+                <input class="sr-only" id="upFile" name="file" type="file" accept="application/pdf,.pdf" aria-labelledby="fileLabel" required>
+              </div>
+              <label class="field"><span>Pages</span>
+                <input id="upPages" name="pages" type="number" inputmode="numeric" min="3" max="400" placeholder="Detected from PDF" required>
+              </label>
+            </div>
+
+            <p class="form-error" id="uploadError" role="alert" hidden></p>
+
+            <div class="upload-progress" id="uploadProgress" hidden>
+              <div class="bar"><div class="bar-fill" id="uploadBar"></div></div>
+              <p id="uploadStage" aria-live="polite">Uploading</p>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg" id="uploadBtn">Upload and publish</button>
+          </form>
+
+          <aside class="glass" aria-labelledby="myNotesHeading">
+            <h2 id="myNotesHeading">Your published units</h2>
+            <ul class="my-notes" id="myNotesList"></ul>
+          </aside>
+        </div>
+      </div>
+
+      <!-- Engagement -->
+      <div class="panel" id="panel-engagement" role="tabpanel" aria-labelledby="tab-engagement" hidden>
+        <div id="engagementRoot"></div>
+      </div>
+
+      <!-- Earnings -->
+      <div class="panel" id="panel-earnings" role="tabpanel" aria-labelledby="tab-earnings" hidden>
+        <div id="earningsRoot"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-foot">
+    <p>MyNotes is a front-end demo. Payments, uploads and payouts are simulated and all data stays in this browser.</p>
+    <button type="button" class="link-btn" id="resetDemo">Reset demo data</button>
+  </footer>
+
+  <!-- ================= Shared modal ================= -->
+  <dialog id="modal" class="modal">
+    <div class="modal-card">
+      <button type="button" class="icon-btn modal-close" id="modalClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </dialog>
+
+  <!-- ================= Document reader ================= -->
+  <dialog id="reader" class="reader paper-scope" data-theme="paper" aria-labelledby="readerTitle">
+    <div class="reader-shell">
+      <header class="reader-bar">
+        <button type="button" class="icon-btn" data-reader="close" aria-label="Close reader">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <div class="reader-heading">
+          <h2 id="readerTitle"></h2>
+          <p id="readerSub"></p>
+        </div>
+
+        <div class="session" id="sessionPill" role="timer" aria-label="Active reading time" data-state="active">
+          <span class="session-dot" aria-hidden="true"></span>
+          <span class="session-time" id="sessionTime">00:00</span>
+          <span class="session-state" id="sessionState">Reading</span>
+        </div>
+
+        <div class="reader-tools">
+          <div class="seg" role="radiogroup" aria-label="Page theme" id="themeSeg">
+            <button type="button" role="radio" aria-checked="true" data-theme-set="paper">Paper</button>
+            <button type="button" role="radio" aria-checked="false" data-theme-set="sepia">Sepia</button>
+            <button type="button" role="radio" aria-checked="false" data-theme-set="night">Night</button>
+          </div>
+          <button type="button" class="tool" data-reader="bookmark" id="bookmarkBtn" aria-pressed="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h10v16l-5-4-5 4z"/></svg><span>Bookmark</span>
+          </button>
+          <button type="button" class="tool" data-reader="summary">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/></svg><span>Summarise</span>
+          </button>
+          <button type="button" class="tool" data-reader="rate">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 4 2.5 5.1 5.5.8-4 3.9.9 5.6-4.9-2.6-4.9 2.6.9-5.6-4-3.9 5.5-.8z"/></svg><span>Rate</span>
+          </button>
+          <button type="button" class="tool" data-reader="download">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v12m0 0-4-4m4 4 4-4M5 20h14"/></svg><span>Download</span>
+          </button>
+          <button type="button" class="tool" data-reader="panel" id="panelBtn" aria-expanded="true" aria-controls="readerPanel">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v14H5zM14 5v14"/></svg><span>Notes</span>
+          </button>
+        </div>
+
+        <div class="reader-progress" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="readerProgress">
+          <div class="reader-progress-fill" id="readerProgressFill"></div>
+        </div>
+      </header>
+
+      <div class="reader-body">
+        <div class="reader-scroll" id="readerScroll" tabindex="0" aria-label="Document pages">
+          <div class="pages" id="readerPages"></div>
+        </div>
+
+        <aside class="reader-panel" id="readerPanel" aria-label="Your notes and bookmarks">
+          <div class="panel-block">
+            <div class="panel-row">
+              <h3>Progress</h3>
+              <span id="progressText">0% read, page 1</span>
+            </div>
+          </div>
+          <div class="panel-block grow">
+            <label for="scratchpad"><h3>Scratchpad</h3></label>
+            <textarea id="scratchpad" placeholder="Jot formulas, doubts or things to revise. Saved on this device as you type."></textarea>
+            <p class="saved-hint" id="scratchSaved" aria-live="polite"></p>
+          </div>
+          <div class="panel-block">
+            <h3>Bookmarks</h3>
+            <ul class="bookmarks" id="bookmarkList"></ul>
+          </div>
+          <p class="wm-notice">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 5 6v6c0 4.5 3 7.7 7 9 4-1.3 7-4.5 7-9V6z"/></svg>
+            <span id="wmNotice"></span>
+          </p>
+        </aside>
+      </div>
+    </div>
+  </dialog>
+
+  <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+  <noscript><p class="noscript">MyNotes needs JavaScript to run.</p></noscript>
+  <script src="script.js" defer></script>
+</body>
+</html>
